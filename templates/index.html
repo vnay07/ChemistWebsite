@@ -1,0 +1,29 @@
+{% extends 'basic.html' %}
+{% load crispy_forms_tags %}
+{% block media_css %} 
+{% load static %}
+    .main_1{
+        margin-top:5%;
+        background-color:black;
+        opacity:.6;
+    }
+    .heading{
+        color:white;
+    }
+{% endblock %}
+{% block content %}
+<div class="container content-section main_1">
+    <img src="{% static 'bg.jpg' %}" alt="My image">
+    <!--{% if user.is_authenticated %}-->
+   <!--<h3 class='heading pt-3'>Welcome {{ user.get_username }}</h3>--> 
+    <!--{% else %} -->
+    <h3 class='heading pt-3'>Please Login to use our services.</h3>
+    <!--{% endif %} -->
+    <br><br><br><br><br><br><br><br><br><br>
+</div>
+{% endblock content %}
+{% block js %}
+
+   
+</script>
+{% endblock %}

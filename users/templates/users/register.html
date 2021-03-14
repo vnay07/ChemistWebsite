@@ -1,0 +1,36 @@
+{% extends 'basic_1.html' %}
+{% load crispy_forms_tags %}
+{% block css %} 
+    <style>
+        @media screen and (max-width: 700px) {
+            .main_2{
+                width: 100%;
+                
+            }
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div class="inner 6u main_2" style="padding-bottom: 3%;padding-top:2%">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend style="font-weight: bolder;" align='center'>REGISTER HERE</legend>
+               {{form|crispy}}
+            </fieldset>
+            <div class="form-group">
+                <button class="btm btn-outline-info" type="submit">Sign Up</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already have an account?
+                <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+            </small>
+        </div>
+        <br>
+        <h4>Please check your email <span style="color: Red;">Spam box</span> also, if you havent recieved mail in inbox!</h4>
+        
+    </div>
+{% endblock content %}

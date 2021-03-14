@@ -1,0 +1,221 @@
+{% extends 'basic_1.html' %}
+{% load crispy_forms_tags %}
+{% block css %} 
+    <style>
+    .heading_form_1{
+      border-bottom: 2px solid rgb(173, 154, 154);
+      justify-content: center;
+      
+    }
+    #my_table_1{
+      overflow-x:auto;
+    }
+    /*.main_3{
+      background-image: url('../media/images/birds.svg');
+      background-repeat: repeat;
+      background-size: cover;
+      background-position: center;
+       /* Add the blur effect */
+     /* filter: blur(4px);
+      -webkit-filter: blur(4px);
+      height: 800px;
+      width: 100%;
+      
+    }*/
+    
+    @media screen and (max-width: 700px) {
+			#my_table_1{
+        overflow-x:auto;
+        
+      }
+      .main_1{
+        left:0;
+        right:0;
+        padding-top: 2%;
+        padding-bottom: 3%;
+        padding-left: 1%;
+        margin:0 ;
+        width: 100%;
+      }
+      #hidden_profile{
+        overflow-x: scroll;
+      }
+      .btn{
+        width: 100px;
+      }
+		}
+  </style>
+{% endblock %}
+{% block content %}
+
+<div class="inner main_1 8u$ ">
+    <div class='heading'>
+    {% if user.is_authenticated %}
+    <h3>Welcome {{ user.get_username }}</h3>
+  </div>
+    {% endif %}
+    
+    <form id="hidden_profile" name='form1' method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <fieldset class="form-group mt-5">
+            <legend class="heading_form_1">Request Order Here
+              
+            </legend>
+            <div class="main_form_fill">
+            
+              
+                {{b_form|crispy}}
+                <br>
+                Dr. Priscription Image : <input type="file" name="myImage" accept="image/*" /><br>
+                
+                E-Mail : <input type="text" class="form-control no_of_staff" name="email_field" 
+                class="txtboxSml2" value="{{user.email}}" readonly="readonly">
+                
+                Current Address : <input type="text" class="form-control no_of_staff" name="address_field" 
+                class="txtboxSml2" value="{{user.profile.address}}" readonly="readonly">
+                
+                Phone Number :<input class="no_of_staff" type="text" name="phoneNumber" value="{{user.profile.phone_number}}" readonly="readonly">
+                
+                <lable>To Change current Address, Phone number or Email-Address click yes box below!</lable><br>
+                <input type="radio" id="demo-priority-low" name="x" value="yes" class="staff_on_site"><label for="demo-priority-low">Yes</label><br>
+
+                <input type="radio" id="demo-priority-normal" name="x" value="no" class="staff_on_site" ><label for="demo-priority-normal">No</label><br>
+               
+              
+
+                <div id="my_table_1" >
+                <table class="table" id="POITable" border="1">
+                  
+                  
+                    <tr>
+                      <th scope="col">SI</th>
+                      <th scope="col">Medicine Name</th>
+                      <th scope="col">Medicine Quantity</th>
+                      <th scope="col">Power(mg)</th>
+                      <th scope="col">Delete?</th>
+                      <th scope="col">Add Rows?</th>
+                    </tr>
+              
+                      <tr>
+                        <td>1</td>
+                        <td><input class="medical_x" type="text" name="medicine_name" id="latbox" /></td>
+                        <td><input class="medical_x" type="number" name="medicine_qty" step="1" type="text" id="lngbox" /></td>
+                        <td><input class="medical_x" type="number" name="medicine_mg" step="1" id="lngbox"/></td>
+                        <td><input type="button" id="delPOIbutton" value="Delete" onclick="deleteRow(this)" /></td>
+                        <td><input type="button" id="addmorePOIbutton" value="Add Row" onclick="insRow()" /></td>
+                      </tr>
+                      
+                    
+                  </table>
+                  <button id="btn_read_HTML_Table" class="button btn" onclick="phonenumber(document.form1.phoneNumber)" type="submit">Order</button>
+                  
+                    <input type="text" name='medical_details' id="output" style="display: none;">
+                  </div>
+                    
+                  
+
+                {% for error in b_form.errors %}
+                    <p class="help is-danger">{{error}}</p>
+                {% endfor %}
+                
+              <div id="butn_1">
+                  
+              </div>
+              
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+
+{% endblock content %}
+{% block js %}
+<script>
+    function deleteRow(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  if (i!=1)
+    document.getElementById('POITable').deleteRow(i);
+}
+
+
+function insRow() {
+  //console.log('hi');
+  var x = document.getElementById('POITable');
+  var new_row = x.rows[1].cloneNode(true);
+  var len = x.rows.length;
+  new_row.cells[0].innerHTML = len;
+
+  var inp1 = new_row.cells[1].getElementsByTagName('input')[0];
+  inp1.id += len;
+  inp1.value = '';
+  var inp2 = new_row.cells[2].getElementsByTagName('input')[0];
+  inp2.id += len;
+  inp2.value = '';
+  x.appendChild(new_row);
+} 
+
+
+
+/*Yes No Script readonly or writable*/
+$(document).ready(function(){
+
+$('.staff_on_site').click(function(){
+
+  var rBtnVal = $(this).val();
+
+  if(rBtnVal == "yes"){
+      $(".no_of_staff").attr("readonly", false); 
+  }
+  else{ 
+      $(".no_of_staff").attr("readonly", true); 
+  }
+});
+});
+
+
+/*Validation phone number*/
+function phonenumber(inputtxt)
+{
+  var phoneno = /^[6-9][0-9]{9}$/;
+  if(inputtxt.value.match(phoneno))
+     {
+	   return true;      
+	 }
+   else
+     {
+	   alert("Not a valid Phone Number. Only 10 digits valid numbers are allowed!");
+	   return false;
+     }
+}
+/*Adding addition data here Jquery*/
+$(document).ready(function () {  
+            $('#btn_read_HTML_Table').click(function () {  
+                var html_table_data = "";  
+                var bRowStarted = true;  
+              
+                var i=1;
+
+                $('#POITable tr').each(function () {  
+                    $('.medical_x', this).each(function () {  
+                        if (html_table_data.length == 0 || bRowStarted == true) {  
+                            html_table_data += $(this).val();  
+                            bRowStarted = false;  
+                        }  
+                        else  
+                            html_table_data += ", " + $(this).val();  
+	
+                    });  
+                    html_table_data += "\t(" + i + ")\t";  
+                    bRowStarted = true;  
+                    i++;
+                });  
+   
+               // alert(html_table_data);  
+	var data= html_table_data;
+	//document.getElementById('output').innerHTML = "Medicine Name |----|Medicine Quantiy|----|Medicine Power(mg)\n"+data;
+  $("#output").val(data);
+            });  
+        }); 
+</script>
+
+{% endblock %}

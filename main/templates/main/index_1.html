@@ -1,0 +1,152 @@
+{% extends 'basic.html' %}
+{% load crispy_forms_tags %}
+{% block media_css %} 
+    .main_1{
+        margin-top:5%;
+        background-color:black;
+        opacity:.6;
+    }
+    .heading{
+        color:white;
+    }
+    #hidden_profile{
+        color:white;
+    }
+    .button_1{
+        text-align:center;
+        justify-content : center;
+    }
+{% endblock %}
+{% block content %}
+<div class="container content-section main_1">
+    
+    {% if user.is_authenticated %}
+    <h3 class='heading pt-3'>Welcome {{ user.get_username }}</h3>
+    {% else %}
+    <h3 class='heading pt-3'>Please Login to use our services.</h3>
+    {% endif %}
+    <br><br>
+    <form id="hidden_profile" name='form1' method="POST" enctype="multipart/form-data"" >
+        {% csrf_token %}
+        <fieldset class="form-group mt-5">
+            <legend class="border-bottom mb-4">Request Order Here
+              
+            </legend>
+            <div class="main_form_fill">
+                
+                {{b_form|crispy}}
+                Dr. Priscription Image : <input type="file" name="myImage" accept="image/*" /><br>
+                E-Mail : <input type="text" class="form-control no_of_staff" name="email_field" 
+                class="txtboxSml2" value="{{user.email}}" readonly="readonly">
+                <lable>To Change E-Mail address click yes box below!</lable><br>
+                <input type="radio" id="need_staff_on_site" name="x" value="yes" class="staff_on_site"><span>Yes</span><br>
+
+                <input type="radio" id="need_staff_on_site" name="x" class="staff_on_site" value="no"><span>No</span><br>
+                Current Address : <input type="text" class="form-control no_of_staff" name="address_field" 
+                class="txtboxSml2" value="{{user.profile.address}}" readonly="readonly">
+                <lable>To Change current address click yes box below!</lable><br>
+                <input type="radio" id="need_staff_on_site" name="x" value="yes" class="staff_on_site"><span>Yes</span><br>
+
+                <input type="radio" id="need_staff_on_site" name="x" class="staff_on_site" value="no"><span>No</span><br>
+                
+                Phone Number :<input class="no_of_staff form-control" type="number" name="phoneNumber" value="{{user.profile.phone_number}}" readonly="readonly">
+                <lable>To Change current Phone number click yes box below!</lable><br>
+                <input type="radio" id="need_staff_on_site" name="x" value="yes" class="staff_on_site"><span>Yes</span><br>
+
+                <input type="radio" id="need_staff_on_site" name="x" class="staff_on_site" value="no"><span>No</span><br>
+
+                <table class="table" id="POITable" border="1" style="color: white;">
+                    <tr>
+                      <td scope="col">SI</td>
+                      <td scope="col">Medicine Name</td>
+                      <td scope="col">Medicine Quantity</td>
+                      <td scope="col">Power(mg)</td>
+                      <td scope="col">Delete?</td>
+                      <td scope="col">Add Rows?</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td><input type="text" id="latbox" /></td>
+                      <td><input type='number' step="1" type="text" id="lngbox" /></td>
+                      <td><input type='number' step="1" id="lngbox"/></td>
+                      <td><input type="button" id="delPOIbutton" value="Delete" onclick="deleteRow(this)" /></td>
+                      <td><input type="button" id="addmorePOIbutton" value="Add Row" onclick="insRow()" /></td>
+                    </tr>
+                  </table>
+
+
+                {% for error in b_form.errors %}
+                    <p class="help is-danger">{{error}}</p>
+                {% endfor %}
+                
+              <div class="form-group button_1">
+                  <button class="btn btn-primary" onclick="phonenumber(document.form1.phoneNumber)" type="submit">Order</button>
+              </div>
+              
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+{% endblock content %}
+{% block js %}
+<script>
+    function deleteRow(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  if (i!=1)
+    document.getElementById('POITable').deleteRow(i);
+}
+
+
+function insRow() {
+  console.log('hi');
+  var x = document.getElementById('POITable');
+  var new_row = x.rows[1].cloneNode(true);
+  var len = x.rows.length;
+  new_row.cells[0].innerHTML = len;
+
+  var inp1 = new_row.cells[1].getElementsByTagName('input')[0];
+  inp1.id += len;
+  inp1.value = '';
+  var inp2 = new_row.cells[2].getElementsByTagName('input')[0];
+  inp2.id += len;
+  inp2.value = '';
+  x.appendChild(new_row);
+} 
+
+
+
+/*Yes No Script readonly or writable*/
+$(document).ready(function(){
+
+$('.staff_on_site').click(function(){
+
+  var rBtnVal = $(this).val();
+
+  if(rBtnVal == "yes"){
+      $(".no_of_staff").attr("readonly", false); 
+  }
+  else{ 
+      $(".no_of_staff").attr("readonly", true); 
+  }
+});
+});
+
+
+/*Validation phone number*/
+function phonenumber(inputtxt)
+{
+  var phoneno = /^[6-9][0-9]{9}$/;
+  if(inputtxt.value.match(phoneno))
+     {
+	   return true;      
+	 }
+   else
+     {
+	   alert("Not a valid Phone Number");
+	   return false;
+     }
+}
+</script>
+
+{% endblock %}

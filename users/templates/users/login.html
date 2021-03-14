@@ -1,0 +1,57 @@
+{% extends 'basic_1.html' %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% block css %} 
+    <style>
+        .main_2{
+               
+                padding-top: 2%;
+                padding-bottom: 15%;
+                
+            }
+        @media screen and (max-width: 700px) {
+            .main_2{
+                width: 100%;
+                padding-top: 2%;
+                padding-bottom: 15%;
+                
+            }
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+
+    <div class="inner 4u main_2">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="border-bottom mb-4" align='center' style="font-weight: bolder;">LOG IN</legend>
+               {{form|crispy}}
+            </fieldset><br>
+            <div class="form-group">
+                <button class="button" type="submit">Login</button>
+                <small class="text-muted ml-2">
+                    <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                </small>
+            </div>
+        </form>
+        <div class="border-top pt-3 ">
+            <small class="text-muted">
+                Need an account?
+                <!--Error in below line ???-->
+                <a href="{% url 'register' %}">Sign Up</a>
+            </small>
+            <div style="display: flex;padding-top: 2%;" ><img src="https://img.icons8.com/color/48/000000/google-logo.png"/>
+                <button class="button"><a style="padding: 3%;" href="{% url 'social:begin' 'google-oauth2' %}">
+                    <strong>Signin with google</strong> 
+                </a></button>
+            </div>
+        </div>
+        
+        
+    </div>
+
+    
+{% endblock content %}

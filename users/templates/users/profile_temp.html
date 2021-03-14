@@ -1,0 +1,79 @@
+{% extends 'basic.html' %}
+{% load crispy_forms_tags %}
+
+{% block media_css %}
+.image_profile{
+  width:150px;
+  height:150px;
+}
+.media_1{
+  margin-top:5%;
+}
+#editProfile{
+  
+}
+{% endblock %}
+{% block content %}
+<div class="container content-section media_1">
+    <div class="media border-bottom">
+      <img class="rounded account-img image_profile" src="{{user.profile.image.url}}">
+      <div class="media-body  " style="color: white;">
+        <h2 class="account-heading p-3">{{user.username}}</h2>
+        
+        <p class="ml-3 p-0"> Address : {{user.profile.address}} </p>
+      
+        <p class="ml-3 p-0"> Phone No. : {{user.profile.phone_number}}</p>
+        
+        
+      </div>
+      <a href="#" style="margin-left: 40%;" id="hide_pro">
+        <i class="fas fa-user-cog" id="editProfile" style="color: grey;">Edit profile</i>
+      </a>
+    </div>
+    <!-- FORM HERE -->
+    <div>
+      <form id="hidden_profile" method="POST" enctype="multipart/form-data"style="visibility:hidden" >
+          {% csrf_token %}
+          <fieldset class="form-group mt-5">
+              <legend class="border-bottom mb-4">Update Profile Info 
+                
+              </legend>
+              <div>
+                  
+                  {{p_form|crispy}}
+                  
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Update</button>
+                </div>
+                <div class='mt-5 border-top '><button class="btn btn-danger mt-1" type="submit" >
+                  <a href="{% url 'logout' %}" style="color: white; font-size: large;padding: 5px;" > Log Out</a></button>
+                </div>
+           </div>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+{% block js %}
+<script>
+  $(document).ready(function(){
+    $("#hide_pro").click(function(){
+      $.ajax({success: function(result){
+        if (document.getElementById("hidden_profile").style.visibility == "hidden")
+         document.getElementById("hidden_profile").style.visibility = "visible";
+         else
+         document.getElementById("hidden_profile").style.visibility = "hidden";
+      }});
+    });
+  });
+
+ 
+ var alerted = localStorage.getItem('alerted') || '';
+    if (alerted != 'yes') {
+     alert("Add your address and phone number, click on edit profile!!!");
+     localStorage.setItem('alerted','yes');
+    }
+
+   
+</script>
+{% endblock %}

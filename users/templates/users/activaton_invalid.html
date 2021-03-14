@@ -1,0 +1,25 @@
+{% extends 'basic_1.html' %}
+{% block css %} 
+    <style>
+        .main_2{
+                
+                padding-top:2%;
+                padding-bottom:40%;
+            }
+        @media screen and (max-width: 700px) {
+            .main_2{
+                width: 100%;
+                padding-top:2%;
+                padding-bottom:30%;
+            }
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+        <div class="main_2 4u inner">
+            <h3>Something went wrong! Do check again and enter valid email.</h3>
+        </div>
+{% endblock content %}
+
+

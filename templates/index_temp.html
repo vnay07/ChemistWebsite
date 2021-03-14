@@ -1,0 +1,30 @@
+{% extends 'basic.html' %}
+
+{% block media_css %} 
+body{
+    background: url(../media/images/bg.jpg);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    
+    background-position: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+.heading{
+    text-align: center;
+}
+{% endblock %}
+{% block content %} 
+<div class="container content-section main" style="color: white; opacity: 0.7; background-color: black;">
+    
+    {% if user.is_authenticated %}
+    <h3 class='heading pt-3'>Welcome {{ user.get_username }}</h3>
+    {% else %}
+    <h3 class='heading pt-3'>Please Login to use our services.</h3>
+    {% endif %}
+    <br><br><br><br><br><br><br><br><br><br>
+
+</div>
+
+{% endblock %}
