@@ -33,9 +33,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['newdoonchemist.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['newdoonchemist.herokuapp.com','127.0.0.1','newdoonchemist.com','www.newdoonchemist.com']
 
 
 # Application definition
